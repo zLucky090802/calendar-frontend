@@ -5,9 +5,9 @@ import enUS from "date-fns/locale/en-US";
 import { addHours } from "date-fns";
 
 import { Navbar, CalendarEvent, CalendarModal, FabAddNew, FabDelete } from "../index";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { localizer, getMessagesEs } from "../../helpers";
-import { useUiStore } from "../../hooks";
+import { useAuthStore, useUiStore } from "../../hooks";
 import { useCalendarStore } from "../../hooks/useCalendarStore";
 import { useSelector } from "react-redux";
 
@@ -28,17 +28,21 @@ import { useSelector } from "react-redux";
 
 export const CalendarPage = () => {
 
-  const {events, setActiveEvent} = useCalendarStore()
+
+  const { user } = useAuthStore();
+  const {events, setActiveEvent, startLoadingEvents} = useCalendarStore()
   const {openDateModal} = useUiStore();
   const [lastView, setLastView] = useState(localStorage.getItem('lastView')||'week')
   const [view, setView] = useState(lastView);
   const [currentDate, setCurrentDate] = useState(new Date());
 
   const eventStyleGetter = (event, start, end, isSelected) => {
+
+    const isMyEvent = ( user.uid === event.user._id ) || ( user.uid === event.user.uid )
     
 
     const style = {
-      backgroundColor: "#A020F0",
+      backgroundColor: isMyEvent ? "#A020F0" : '#465660',
       borderRadius: "0px",
       opacity: 0.8,
       color: "white",
@@ -61,6 +65,11 @@ export const CalendarPage = () => {
     setLastView(event)
 
   }
+
+  useEffect(() => {
+    startLoadingEvents();
+  }, [])
+  
   return (
     <>
       <Navbar />

@@ -3,6 +3,7 @@ import { calendarApi } from "../api";
 import { clearErrorMessage, onChecking, onLogin, onLogout } from "../store/auth/authSlice";
 import { data } from "react-router-dom";
 import { useEffect } from "react";
+import { onLogoutCalendar } from "../store";
 
 
 export const useAuthStore = () =>{
@@ -65,6 +66,7 @@ export const useAuthStore = () =>{
 
     const startLogout = () =>{
         localStorage.clear();
+        dispatch(onLogoutCalendar());
         dispatch(onLogout());
     }
 

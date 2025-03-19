@@ -83,7 +83,7 @@ export const CalendarModal = () => {
     await startSavingEvent(formValues);
     closeDateModal();
     setFormSubmitted(false);
-    Swal.fire('Evento Guardado Correctamente', '','success')
+    
     
   }
   const onDateChanged = (event, changing ) =>{
